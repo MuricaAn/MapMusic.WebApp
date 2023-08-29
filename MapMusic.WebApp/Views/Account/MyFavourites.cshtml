@@ -1,0 +1,73 @@
+﻿@using MapMusic.Common.DTOs;
+@using MapMusic.Entities.Enums;
+@model MapMusic.BusinessLogic.Implementation.Account.Models.UserFavourites;
+@inject CurrentUserDTO CurrentUser;
+
+<link rel="stylesheet" href="~/css/EventsList.css" />
+<script type="text/javascript" src="~/js/Favourite.js"></script>
+
+<div class="grid-container">
+    @foreach (var item in Model.FavouritesEvents)
+    {
+        <div class="grid-item">
+            <div class="box">
+                <div id="@item.Id" class="fire-button">
+                </div>
+                @if (CurrentUser.IsLoggedIn)
+                {
+                    if (CurrentUser.RoleId == (int)RoleType.User)
+                    {
+                        <script>
+                            addFavouriteButton(@item.Id, @CurrentUser.Id);
+                        </script>
+                    }
+                }
+                else
+                {
+                    <div class="fire-button">
+                        <a href="https://localhost:7275/Account/Login">
+                            <img src="~/img/empty-fire.png">
+                        </a>
+                    </div>
+                }
+                <h2 class="title">@item.Name</h2>
+                <div class="poster">
+                    <img src="data:image/png;base64,@Convert.ToBase64String(item.ProfilePhoto)" />
+                </div>
+                <p>
+                    @item.MusicType show, at : <a asp-controller="Location" asp-action="ShowLocation" asp-route-locationId="@item.Location.Id">@item.Location.Name</a> ,
+                    by <a asp-controller="Account" asp-action="ShowOrganizer" asp-route-organizerId="@item.Organizer.Item1">@item.Organizer.Item2</a>
+                </p>
+                <p class="details">
+                    On <b>@item.StartDate.ToString("dd.MM.yyyy HH:mm")</b> till <b>@item.EndDate.ToString("dd.MM.yyyy HH:mm")</b>
+                </p>
+                <p>
+                    Artists:
+                    @if (item.Artists != null)
+                    {
+                        @foreach (var artist in item.Artists)
+                        {
+                            <a asp-controller="Artist" asp-action="ShowArtist" asp-route-artistId="@artist.Item1">@artist.Item2 ,</a>
+                        }
+                    }
+                </p>
+                <a asp-controller="Event" asp-action="ShowEvent" asp-route-eventId="@item.Id" class="action-button">More about</a>
+                @if (item.EndDate < DateTime.Now){
+                    @if (CurrentUser.IsLoggedIn)
+                    {
+                        if (CurrentUser.RoleId == (int)RoleType.User)
+                        {
+                            <a asp-controller="Rating" asp-action="RateEvent" asp-route-eventId="@item.Id">Rate</a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="https://localhost:7275/Account/Login">
+                            Rate
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>

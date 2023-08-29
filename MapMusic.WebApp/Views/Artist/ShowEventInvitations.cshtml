@@ -1,0 +1,43 @@
+﻿<style>
+    #organizer-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .organizer-card {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+        min-width: 250px;
+        max-width: 300px;
+    }
+
+    .pending {
+        background-color: #ffffcc;
+    }
+
+    .accepted {
+        background-color: #ccffcc;
+    }
+
+    .rejected {
+        background-color: #ff2424;
+    }
+
+    .button-container {
+        display: flex;
+    }
+
+        .button-container form {
+            margin-right: 5px;
+        }
+</style>
+<h1>Events invitations</h1>
+<div id="filter-buttons"></div>
+<div id="organizer-container">
+
+</div>
+<script type="text/javascript" src="~/js/ShowArtistInvitations.js"></script>
+<script type="text/javascript">
+    ShowArtistInvitations("organizer-container");
+</script>

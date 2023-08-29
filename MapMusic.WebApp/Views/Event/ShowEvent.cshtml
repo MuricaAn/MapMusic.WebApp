@@ -1,0 +1,137 @@
+﻿@model MapMusic.BusinessLogic.Implementation.Event.Models.ShowEventModel;
+
+@{
+    ViewData["Title"] = "View";
+}
+<header>
+    <link rel="stylesheet" href="~/css/Stars.css" />
+</header>
+
+<h1>Event</h1>
+@if (@Model.EndDate < DateTime.Now)
+{
+    <a asp-controller="Photo" asp-action="PhotoEvent" asp-route-eventId="@Model.Id" class="action-button">View Photos</a>
+}
+<div class="row">
+    <div class="col-md-8">
+
+        <div>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    Confirmed_Artists
+                </dt>
+                <dd class="col-sm-10">
+                    @foreach (var artist in Model.Artists)
+                    {
+
+                        <a asp-controller="Artist" asp-action="ShowArtist" asp-route-artistId="@artist.Item1">@artist.Item2 ,</a>
+                    }
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Price)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.StartDate)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.EndDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.EndDate)
+                </dd>
+                <dt class="col-sm-2">
+                    Location
+                </dt>
+                <dd class="col-sm-10">
+                    <a asp-controller="Location" asp-action="ShowLocation" asp-route-locationId="@Model.Location.Id">@Model.Location.Name</a>
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Location.Address)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Location.Address)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.MusicType)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.MusicType)
+                </dd>
+                <dt class="col-sm-2">
+                    Organizer
+                </dt>
+                <dd class="col-sm-10">
+                    <a asp-controller="Account" asp-action="ShowOrganizer" asp-route-organizerId="@Model.Organizer.Item1">@Model.Organizer.Item2</a>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <img src="data:image/png;base64,@Convert.ToBase64String(Model.ProfilePhoto)" style="width: 300px; height: 500px;" />
+    </div>
+</div>
+
+@if (Model.EndDate < DateTime.Now)
+{
+    <h4>Reviews</h4>
+    @if (Model.Ratings.Count > 0)
+    {
+        foreach (var rating in Model.Ratings)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h3>
+                        @rating.FirstName @rating.LastName
+                        <span>
+                            @for (int i = 0; i < (int)rating.OverallRating; i++)
+                            {
+                                <span class="full-star material-symbols">star</span>
+                            }
+                            @if (rating.OverallRating != (int)rating.OverallRating)
+                            {
+                                <span class="star-half material-symbols">star_half</span>
+                                @for (float i = rating.OverallRating + 1; i < 5; i++)
+                                {
+                                    <span class="empty-star material-symbols">star</span>
+                                }
+                            }
+                            else
+                            {
+                                @for (float i = rating.OverallRating; i < 5; i++)
+                                {
+                                    <span class="empty-star material-symbols">star</span>
+                                }
+                            }
+                        </span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @rating.Comment
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div>No reviews</div>
+    }
+}

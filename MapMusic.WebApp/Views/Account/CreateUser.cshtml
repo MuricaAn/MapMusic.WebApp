@@ -1,0 +1,62 @@
+﻿@model MapMusic.BusinessLogic.Implementation.Account.Models.RegisterUserModel;
+
+<nav class="createAccountFormular">
+    <ul class="accountsOptions">
+        <li>User</></li>
+        <li><a asp-controller="Account" asp-action="CreateArtist">Artist</a></li>
+        <li><a asp-controller="Account" asp-action="CreateOrganizer">Organizer</a></li>
+    </ul>
+</nav>
+<div class="page-header">
+    <h1>Create Account</h1>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Please enter your credentials</h3>
+            </div>
+            <div class="panel-body">
+               
+                <form asp-route="CreateAccount">
+                    <fieldset>
+                        <div class="mb-3">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input class="form-control" placeholder="FirstName" asp-for="FirstName">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input class="form-control" placeholder="LastName" asp-for="LastName">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input type="Email" class="form-control" placeholder="Email" asp-for="Email">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input type="password" class="form-control" placeholder="Password" asp-for="Password">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PasswordVerification" class="form-label"></label>
+                            <input type="password" class="form-control" placeholder="PasswordVerification" asp-for="PasswordVerification">
+                            <span asp-validation-for="PasswordVerification" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="BirthDay" class="form-label"></label>
+                            <input type="date" class="form-control" placeholder="BirthDay" asp-for="BirthDay">
+                            <span asp-validation-for="BirthDay" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary">CreateAccount</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

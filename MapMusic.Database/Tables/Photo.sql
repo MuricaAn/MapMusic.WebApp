@@ -1,0 +1,5 @@
+﻿CREATE TABLE Photo (
+    Id INT IDENTITY(1, 1) PRIMARY KEY,
+    Content VARBINARY(MAX) NULL,
+    CreatedOn DATE NOT NULL
+);

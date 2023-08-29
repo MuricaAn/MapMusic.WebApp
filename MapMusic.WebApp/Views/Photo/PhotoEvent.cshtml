@@ -1,0 +1,47 @@
+﻿@model MapMusic.BusinessLogic.Implementation.Event.Models.ShowEventPhotoModel;
+
+<head>
+
+    <link rel="stylesheet" href="~/css/PhotoList.css" />
+</head>
+<h1>Photos</h1>
+<div class="grid-container">
+    <div>
+        <form asp-controller="Photo" asp-action="PhotoEvent" enctype="multipart/form-data">
+            <fieldset>
+                <div class="form-group" style="display : none">
+                    <label asp-for="Id"></label>
+                    <input asp-for="Id" type="text" class="form-control" value="@Model.Id">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Photo" class="control-label"></label>
+                    <input asp-for="Photo" type="file" class="form-control" />
+                    <span asp-validation-for="Photo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhotoDescription" class="control-label"></label>
+                    <input asp-for="PhotoDescription" class="form-control" />
+                    <span asp-validation-for="PhotoDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Add Photo" class="btn btn-primary" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="photo-container">
+    @if (Model.Photos != null)
+    {
+        @foreach (var item in Model.Photos)
+        {
+            <div class="img-box">
+                <div class="image-container">
+                    <img src="data:image/png;base64,@Convert.ToBase64String(item.Item2)" />
+                </div>
+                <p>@item.Item1</p>
+                <a asp-controller="Photo" asp-action="DeletePhotoEvent" asp-route-photoId="@item.Item3" asp-route-eventid="@Model.Id" class="action-button">Delete Photo</a>
+            </div>
+        }
+    }
+</div>

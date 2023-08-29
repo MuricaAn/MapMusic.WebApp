@@ -1,0 +1,25 @@
+﻿
+.photo-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 320px));
+    padding-bottom : 70px;
+}
+
+.img-box{
+    width:200px;
+    height: 300px;
+}
+
+.image-container {
+    width: 200px;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+}

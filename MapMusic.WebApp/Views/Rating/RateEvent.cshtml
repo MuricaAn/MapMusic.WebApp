@@ -1,0 +1,82 @@
+﻿@model MapMusic.BusinessLogic.Implementation.Rating.Models.GiveRatingModel;
+
+
+<script type="text/javascript" src="~/js/CreateStarsRating.js"></script>
+<link rel="stylesheet" href="~/css/Stars.css" />
+
+<h1>Rate you experience at @Model.EventName</h1>
+
+<form asp-action="RateEvent" enctype="multipart/form-data">
+    <input asp-for="IsRated" class="form-control" style=" display : none; " />
+    <input asp-for="EventId" class="form-control" style=" display : none; "/>
+    <div>
+        Rate the location, <b>@Model.LocationName</b>
+            <div id="rating-location"></div>
+        @if (Model.IsRated == true)
+        {
+            <script>
+                voteStars("rating-location", "RatingLocation", @Model.RatingLocation);
+            </script>
+        }
+        else
+        {
+            <script>
+                createStars("rating-location", "RatingLocation");
+            </script>
+        }
+        <span asp-validation-for="RatingLocation" class="text-danger"></span>
+    </div>
+    <div>
+        Rate the organization of the event by <b>@Model.OrganizerName</b>
+            <div id="rating-organizer"></div>
+        @if (Model.IsRated == true)
+        {
+            <script>
+                voteStars("rating-organizer", "RatingOrganization", @Model.RatingOrganization);
+            </script>
+        }
+        else
+        {
+            <script>
+                createStars("rating-organizer", "RatingOrganization");
+            </script>
+        }
+        <span asp-validation-for="RatingOrganization" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Comment" class="control-label"></label>
+        <textarea asp-for="Comment" class="form-control"></textarea>
+        <span asp-validation-for="Comment"></span>
+    </div>
+    
+    @for (int i = 0; i < Model.PresentArtists.Count(); i++)
+    {
+        <div>
+            Rate <b>@Model.PresentArtists[i].StageName</b>'s performance
+            <div id="@Model.PresentArtists[i].Id"></div>
+            <input asp-for="ArtistsId" class="form-control" style=" display : none; " value="@Model.PresentArtists[i].Id" />
+            @if (Model.IsRated == true )
+            {
+                <script>
+                    voteStars("@Model.PresentArtists[i].Id", "RatingsForArtists", @Model.RatingsForArtists[i]);
+                </script>
+            }
+            else {
+            <script>
+                    createStars("@Model.PresentArtists[i].Id", "RatingsForArtists");
+            </script>
+            }
+        </div>
+    }
+    <div class="form-group">
+        @if (Model.IsRated == false)
+        {
+            <input type="submit" value="Create" class="btn btn-primary" />
+        }
+        else
+        {
+            <input type="submit" value="Update" class="btn btn-primary" />
+
+        }
+    </div>
+</form>

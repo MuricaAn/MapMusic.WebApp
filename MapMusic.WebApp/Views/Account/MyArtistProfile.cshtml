@@ -1,0 +1,64 @@
+﻿@model MapMusic.BusinessLogic.Implementation.Account.Models.MyArtistProfileModel;
+
+<div class="container mt-5">
+    <h2>Edit Profile</h2>
+    <hr>
+    <form asp-route="MyUserProfile" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="StageName"></label>
+            <input asp-for="StageName" type="text" class="form-control" value="@Model.StageName">
+            <span asp-validation-for="StageName" class="text-danger"></span>
+        </div>
+        <div>
+            <img id="profile-image"  style="width: 50px; height: 50px;" />
+        </div>
+        <div class="form-group" style="display : none">
+            <label asp-for="Id"></label>
+            <input asp-for="Id" type="text" class="form-control" value="@Model.Id">
+        </div>
+        <div class="form-group">
+            <label asp-for="NewPassword">New Password</label>
+            <input asp-for="NewPassword" type="password" class="form-control" id="password" placeholder="Enter new password">
+        </div>
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" type="text" class="form-control" value="@Model.Description"></textarea>
+        </div>
+        <div class="form-group">
+            @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.ProfilePhoto.Content)" style="width: 50px; height: 50px;" />*@
+            <label asp-for="NewProfilePhoto" class="control-label"></label>
+            <input asp-for="NewProfilePhoto" type="file" class="form-control" id="newPhoto" />
+            <span id="divPhoto"></span>
+        </div>
+        <div class="form-group" style="display : none">
+            <label asp-for="ProfilePhotoId"></label>
+            <input asp-for="ProfilePhotoId" type="text" class="form-control" value="@Model.ProfilePhotoId">
+        </div>
+        <div class="form-group">
+            <label asp-for="CurrentPassword">Curent Password</label>
+            <input asp-for="CurrentPassword" type="password" class="form-control" id="CurrentPassword" placeholder="Current Password">
+            <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+
+        </div>
+        <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a asp-controller="Home" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="~/js/PhotoUpdater.js"></script>
+
+
+<script type="text/javascript">
+    PhotoUpdate("newPhoto", "divPhoto")
+
+    window.onload = () => {
+        fetch("https://localhost:7275/Photo/ShowPhoto/@Model.ProfilePhotoId")
+            .then(res => res.json())
+            .then(result => {
+                console.log(result);
+                document.getElementById("profile-image").src = result.image;
+            })
+    }
+</script>

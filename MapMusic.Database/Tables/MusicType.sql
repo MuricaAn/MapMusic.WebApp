@@ -1,0 +1,5 @@
+﻿CREATE TABLE MusicType (
+    Id INT IDENTITY(1, 1) PRIMARY KEY,
+    Name NVARCHAR(50) NOT NULL,
+    CONSTRAINT Unique_MusicType UNIQUE (Name)
+);

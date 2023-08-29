@@ -1,0 +1,187 @@
+﻿@using MapMusic.Common.DTOs;
+@using MapMusic.Entities.Enums;
+@model MapMusic.BusinessLogic.Implementation.Organizer.Models.ShowOrganizerModel;  
+@inject CurrentUserDTO CurrentUser;
+
+<head>
+    <link rel="stylesheet" href="~/css/LocationContent.css" />
+    <link rel="stylesheet" href="~/css/EventsList.css" />
+    <script type="text/javascript" src="~/js/Favourite.js"></script>
+    <script type="text/javascript" src="~/js/ShowContent.js"></script>
+</head>
+<body>
+    <h1>@Model.FullName</h1>
+
+    <div>
+        <input type="radio" id="option1" name="options" onclick="showContent('content1')" checked> About
+        <input type="radio" id="option2" name="options" onclick="showContent('content2')"> Events
+    </div>
+
+    <div class="content" id="content1">
+        <div class="grid-container">
+            <div class="class-info">
+                <h2>About this Artist</h2>
+                <p>Name: @Model.FullName</p>
+                <p>Description: @Model.Description</p>
+                @if (Model.Rating == 0)
+                {
+                    <p>Rating: No rating yet</p>
+                }
+                else
+                {
+                    <p>Rating: @Model.Rating.ToString("F2")</p>
+                }
+            </div>
+            <div class="map-container">
+                <h2>Profile Photo</h2>
+                <div class="map-placeholder">
+                    <img src="data:image/png;base64,@Convert.ToBase64String(Model.ProfilePhoto.Content)" style="width: 365.33px; height: 400px;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" id="content2">
+        @if (Model.UpcomingEvents.Count > 0)
+        {
+            <h2>Upcoming Events</h2>
+        }
+        <div class="grid-container">
+            @foreach (var item in Model.UpcomingEvents)
+            {
+                <div class="grid-item">
+                    <div class="box">
+                        <div id="@item.Id" class="fire-button">
+                        </div>
+                        @if (CurrentUser.IsLoggedIn)
+                        {
+                            if (CurrentUser.RoleId == (int)RoleType.User)
+                            {
+                                <script>
+                                    addFavouriteButton(@item.Id, @CurrentUser.Id);
+                                </script>
+                            }
+                        }
+                        else
+                        {
+                            <div class="fire-button">
+                                <a href="https://localhost:7275/Account/Login">
+                                    <img src="~/img/empty-fire.png">
+                                </a>
+                            </div>
+                        }
+                        <h2 class="title">@item.Name</h2>
+                        <div class="poster">
+                            <img src="data:image/png;base64,@Convert.ToBase64String(item.ProfilePhoto)" />
+                        </div>
+                        <p>
+                            @item.MusicType show, at : <a asp-controller="Location" asp-action="ShowLocation" asp-route-locationId="@item.Location.Id">@item.Location.Name</a> ,
+                            by <a asp-controller="Account" asp-action="ShowOrganizer" asp-route-organizerId="@item.Organizer.Item1">@item.Organizer.Item2</a>
+                        </p>
+                        <p class="details">
+                            On <b>@item.StartDate.ToString("dd.MM.yyyy HH:mm")</b> till <b>@item.EndDate.ToString("dd.MM.yyyy HH:mm")</b>
+                        </p>
+                        <p>
+                            Artists:
+                            @if (item.Artists != null)
+                            {
+                                @foreach (var artist in item.Artists)
+                                {
+                                    <a asp-controller="Artist" asp-action="ShowArtist" asp-route-artistId="@artist.Item1">@artist.Item2 ,</a>
+                                }
+                            }
+                        </p>
+                        <a asp-controller="Event" asp-action="ShowEvent" asp-route-eventId="@item.Id" class="action-button">More about</a>
+                        @if (CurrentUser.RoleId == (int)RoleType.Organizer && CurrentUser.Id == item.Organizer.Item1)
+                        {
+                            <a asp-controller="Event" asp-action="EditEvent" asp-route-eventId="@item.Id" class="action-button">Edit</a>
+                            <a asp-controller="Event" asp-action="DeleteEvent" asp-route-eventId="@item.Id" class="action-button">Delete</a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        @if (Model.PastEvents.Count > 0)
+        {
+            <h2>Past Events</h2>
+        }
+        <div class="grid-container">
+            @foreach (var item in Model.PastEvents)
+            {
+                <div class="grid-item">
+                    <div class="box">
+                        <div id="@item.Id" class="fire-button">
+                        </div>
+                        @if (CurrentUser.IsLoggedIn)
+                        {
+                            if (CurrentUser.RoleId == (int)RoleType.User)
+                            {
+                                <script>
+                                    addFavouriteButton(@item.Id, @CurrentUser.Id);
+                                </script>
+                            }
+                        }
+                        else
+                        {
+                            <div class="fire-button">
+                                <a href="https://localhost:7275/Account/Login">
+                                    <img src="~/img/empty-fire.png">
+                                </a>
+                            </div>
+                        }
+                        <h2 class="title">@item.Name</h2>
+                        <div class="poster">
+                            <img src="data:image/png;base64,@Convert.ToBase64String(item.ProfilePhoto)" />
+                        </div>
+                        <p>
+                            @item.MusicType show, at : <a asp-controller="Location" asp-action="ShowLocation" asp-route-locationId="@item.Location.Id">@item.Location.Name</a> ,
+                            by <a asp-controller="Account" asp-action="ShowOrganizer" asp-route-organizerId="@item.Organizer.Item1">@item.Organizer.Item2</a>
+                        </p>
+                        <p class="details">
+                            On <b>@item.StartDate.ToString("dd.MM.yyyy HH:mm")</b> till <b>@item.EndDate.ToString("dd.MM.yyyy HH:mm")</b>
+                        </p>
+                        <p>
+                            Artists:
+                            @if (item.Artists != null)
+                            {
+                                @foreach (var artist in item.Artists)
+                                {
+                                    <a asp-controller="Artist" asp-action="ShowArtist" asp-route-artistId="@artist.Item1">@artist.Item2 ,</a>
+                                }
+                            }
+                        </p>
+                        <a asp-controller="Event" asp-action="ShowEvent" asp-route-eventId="@item.Id" class="action-button">More about</a>
+                        @if (item.EndDate < DateTime.Now)
+                        {
+                            @if (CurrentUser.IsLoggedIn)
+                            {
+                                if (CurrentUser.RoleId == (int)RoleType.User)
+                                {
+                                    <a asp-controller="Rating" asp-action="RateEvent" asp-route-eventId="@item.Id">Rate</a>
+                                }
+                            }
+                            else
+                            {
+                                <a href="https://localhost:7275/Account/Login">
+                                    Rate
+                                </a>
+                            }
+                        }
+                        @if (CurrentUser.RoleId == (int)RoleType.Organizer && CurrentUser.Id == item.Organizer.Item1 && item.EndDate > DateTime.Now)
+                        {
+                            <a asp-controller="Event" asp-action="EditEvent" asp-route-eventId="@item.Id" class="action-button">Edit</a>
+                            <a asp-controller="Event" asp-action="DeleteEvent" asp-route-eventId="@item.Id" class="action-button">Delete</a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="content" id="content3">
+        <p>Content for Option 3</p>
+    </div>
+</body>
+<script>
+    document.getElementById("content1").style.display = 'block';
+</script>
